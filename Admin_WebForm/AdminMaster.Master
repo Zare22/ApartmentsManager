@@ -1,0 +1,65 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="AdminMaster.master.cs" Inherits="Admin_WebForm.AdminMaster" %>
+
+<!DOCTYPE html>
+<html>
+<head runat="server">
+    <title></title>
+    <link rel="stylesheet" href="Content/bootstrap.min.css" />
+    <link rel="stylesheet" href="Content/all.min.css" />
+
+</head>
+<body>
+    <form id="form1" runat="server">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">RWA PROJECT</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class='navbar-nav me-auto mb-2 mb-lg-0'>
+                    <% if (Session["user"] != null)
+                        { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Apartments.aspx" runat="server">Apartments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Users.aspx" runat="server">Users</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Tags.aspx" runat="server">Tags</a>
+                    </li>
+                    <% } %>
+                </ul>
+                <% if (Session["user"] != null)
+                    { %>
+                <ul class='navbar-nav d-flex m-1'>
+                    <li class='nav-item'>
+                        <asp:Button class='nav-link btn btn-danger text-white' ID="btnLogout" runat="server" Text="Logout" OnClientClick="return confirm('Are you sure you want to logout?');" OnClick="btnLogout_Click" />
+                    </li>
+                </ul>
+                <% }  %>
+            </div>
+        </nav>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <asp:ContentPlaceHolder ID="MainContent" runat="server">
+                    </asp:ContentPlaceHolder>
+                </div>
+
+            </div>
+        </div>
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 d-flex align-items-center justify-content-center">
+                        <p>Copyright © <%= DateTime.Now.Year %> RWA Project</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </form>
+    <script src="Scripts/jquery-3.6.1.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+</body>
+</html>
