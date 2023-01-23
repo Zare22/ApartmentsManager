@@ -84,13 +84,16 @@ namespace Admin_WebForm
 
                 if (ddlStatus.SelectedItem.ToString() != Status.Any.ToString())
                 {
-                    filteredApartments = _apartments.Where(a => a.Status.ToString() == ddlStatus.SelectedValue.ToString()).ToList();
+                    filteredApartments = _apartments.Where(a => ((int)a.Status).ToString() == ddlStatus.SelectedValue.ToString()).ToList();
                 }
 
                 if (!string.IsNullOrWhiteSpace(txtBoxCity.Text.Trim()))
                 {
-                    filteredApartments = _apartments.Where(a => a.CityName != null && a.CityName.ToLower().Contains(txtBoxCity.Text.Trim().ToLower())).ToList();
+                    filteredApartments = filteredApartments.Where(a => a.CityName != null && a.CityName.ToLower().Contains(txtBoxCity.Text.Trim().ToLower())).ToList();
                 }
+
+
+
 
                 LoadApartments(filteredApartments);
             }
