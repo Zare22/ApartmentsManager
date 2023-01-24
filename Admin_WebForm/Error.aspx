@@ -17,8 +17,8 @@
                             <h1 class="text-center">Error</h1>
                             <p class="text-center">An error has occurred. Please try again or go back.</p>
                             <div class="text-center">
-                                <asp:Button ID="btnTryAgain" runat="server" CssClass="btn btn-danger mr-2" Text="Try Again" OnClick=""/>
-                                <asp:Button ID="btnGoBack" runat="server" CssClass="btn btn-secondary" Text="Go Back" />
+                                <asp:Button ID="btnTryAgain" runat="server" CssClass="btn btn-danger mr-2" Text="Try Again" OnClick="btnTryAgain_Click"/>
+                                <asp:Button ID="btnGoBack" runat="server" CssClass="btn btn-secondary" Text="Go Back" OnClick="btnGoBack_Click"/>
                             </div>
                         </div>
                     </div>
