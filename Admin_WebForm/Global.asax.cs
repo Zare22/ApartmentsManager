@@ -24,9 +24,6 @@ namespace Admin_WebForm
             RouteConfig.RegisterRoutes(RouteTable.Routes);
         }
 
-        protected void Application_Error(object sender, EventArgs e)
-        {
-
-        }
+        protected void Application_Error(object sender, EventArgs e) => Response.Redirect("Error.aspx");
     }
 }

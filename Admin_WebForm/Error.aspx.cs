@@ -13,5 +13,19 @@ namespace Admin_WebForm
         {
 
         }
+
+        protected void btnTryAgain_Click(object sender, EventArgs e) => Response.Redirect(Request.RawUrl);
+
+        protected void btnGoBack_Click(object sender, EventArgs e)
+        {
+            if (Request.UrlReferrer != null)
+            {
+                Response.Redirect(Request.UrlReferrer.ToString());
+            }
+            else
+            {
+                Response.Redirect("Apartments.aspx");
+            }
+        }
     }
 }
