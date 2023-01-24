@@ -91,10 +91,6 @@ namespace Admin_WebForm
                 {
                     filteredApartments = filteredApartments.Where(a => a.CityName != null && a.CityName.ToLower().Contains(txtBoxCity.Text.Trim().ToLower())).ToList();
                 }
-
-
-
-
                 LoadApartments(filteredApartments);
             }
         }

@@ -10,10 +10,10 @@ namespace Admin_WebForm.App_Code
         protected override void OnPreInit(EventArgs e)
         {
             base.OnPreInit(e);
-            //if (Session["user"] == null)
-            //{
-            //    Response.Redirect("Login.aspx");
-            //}
+            if (Session["user"] == null)
+            {
+                Response.Redirect("Login.aspx");
+            }
         }
     }
 
