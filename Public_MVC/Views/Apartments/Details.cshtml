@@ -1,0 +1,129 @@
+﻿@model Public_MVC.Models.Apartment
+@using Public_MVC.Extensions
+@{
+    ViewBag.Title = "Details";
+}
+
+@*<style>
+    .thumbnail-image {
+        width:200px;
+        height:200px;
+        object-fit: fill;
+    }
+
+    .card {
+        border: none;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .card:hover {
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    }
+
+    .card-img-top-container {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .card-body {
+        padding: 1.25rem;
+    }
+
+    .card-title {
+        font-size: 1.5rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .card-subtitle {
+        font-size: 1.25rem;
+        color: gray;
+        margin-bottom: 1.25rem;
+    }
+
+    .card-text {
+        font-size: 1.125rem;
+        color: gray;
+        margin-bottom: 1.25rem;
+    }
+    .card-action {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 1rem;
+        border-top: 1px solid #e9e9e9;
+    }
+
+    .card-action a {
+        color: #333;
+        text-decoration: none;
+        margin-left: 1rem;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .card-action a:hover {
+         color: #ff5722;
+         transform: translateY(-2px);
+    }*@
+
+@*</style>*@
+
+
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h3>@Model.Name</h3>
+        </div>
+        <div class="card-body">
+            <div class="card-img-top-container">
+                @foreach (var image in Model.ApartmentPictures)
+                {
+                    if (image.DeletedAt == null)
+                    {
+                        <a class="fancy-photo"
+                           href="data:image/png;base64,@Convert.ToBase64String(image.Base64Content.FromBase64String())"
+                           rel="group">
+                            <img class="card-img-top thumbnail-image" src="data:image/png;base64,@Convert.ToBase64String(image.Base64Content.FromBase64String())" alt="...">
+                        </a>
+                    }
+                }
+            </div>
+            <div class="card-text">
+                <dl class="row">
+                    <dt class="col-sm-3">Name</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Name)</dd>
+
+                    <dt class="col-sm-3">Status</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.ApartmentStatus.Name)</dd>
+
+                    <dt class="col-sm-3">City</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.City.Name) </dd>
+
+                    <dt class="col-sm-3">Addres</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Address) </dd>
+
+                    <dt class="col-sm-3">Price</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Price) </dd>
+
+                    <dt class="col-sm-3">Adults</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.MaxAdults) </dd>
+
+                    <dt class="col-sm-3">Children</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.MaxChildren) </dd>
+
+                    <dt class="col-sm-3">Rooms</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.TotalRooms) </dd>
+
+                    <dt class="col-sm-3">Beach distance</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.BeachDistance) </dd>
+                </dl>
+            </div>
+            <div class="card-text">
+                @Html.ActionLink("Back to all apartments", "Index")
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
