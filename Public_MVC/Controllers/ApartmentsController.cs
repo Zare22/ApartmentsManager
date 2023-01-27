@@ -102,6 +102,73 @@ namespace Public_MVC.Controllers
         }
 
 
+        [HttpPost]
+        public ActionResult LeaveReview(int apartmentId, ApartmentReview review)
+        {
+            if (!ModelState.IsValid)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            review.UserId = 1;
+            review.ApartmentId = apartmentId;
+            db.ApartmentReviews.Add(review);
+            db.SaveChanges();
+
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
+        public ActionResult ReserveApartment(string email, string phone, string address, string username, int apartmentId)
+        {
+            try
+            {
+                var apartment = db.Apartments.Find(apartmentId);
+
+                var user = new AspNetUser
+                {
+                    CreatedAt = DateTime.Now,
+                    Guid = Guid.NewGuid(),
+                    IsAdmin = false,
+                    Email = email,
+                    EmailConfirmed = true,
+                    PhoneNumber = phone,
+                    PhoneNumberConfirmed = true,
+                    LockoutEnabled = false,
+                    AccessFailedCount = 0,
+                    Address = address,
+                    UserName = username
+                };
+
+
+                db.AspNetUsers.Add(user);
+                apartment.ApartmentStatus = db.ApartmentStatus.FirstOrDefault(s => s.Id == 3);
+
+                
+
+                db.ApartmentReservations.Add(new ApartmentReservation
+                {
+                    ApartmentId = apartmentId,
+                    Guid = Guid.NewGuid(),
+                    CreatedAt = DateTime.Now,
+                    UserAddress = user.Address,
+                    UserName = username,
+                    UserEmail = email,
+                    UserPhone = phone
+                });
+                
+                db.SaveChanges();
+
+
+                return Json(new { success = true });
+            }
+            catch (Exception)
+            {
+                return Json(new { success = false });
+            }
+        }
+
+
 
         public FileResult GetImage(int imageId)
         {
