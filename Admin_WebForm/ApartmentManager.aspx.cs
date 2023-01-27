@@ -163,6 +163,11 @@ namespace Admin_WebForm
 
         protected void btnAddNewApartment_Click(object sender, EventArgs e)
         {
+            if (repeaterImages.Items.Count > 0)
+            {
+                SetRepresentative((IList<Image>)Session["selectedImages"]);
+            }
+
             ((IRepository)Application["database"]).CreateApartment(
                 new Apartment
                 {
@@ -181,8 +186,14 @@ namespace Admin_WebForm
             BackToApartments();
         }
 
+
         protected void btnSaveChanges_Click(object sender, EventArgs e)
         {
+            if (repeaterImages.Items.Count > 0)
+            {
+                SetRepresentative((IList<Image>)Session["selectedImages"]);
+            }
+
             ((IRepository)Application["database"]).UpdateApartment(
                 new Apartment
                 {
@@ -201,6 +212,8 @@ namespace Admin_WebForm
                 });
             BackToApartments();
         }
+
+        private void SetRepresentative(IList<Image> images) => images.ToList()[0].IsRepresentative = true;
 
         protected void btnCloseApartmentManager_Click(object sender, EventArgs e)
         {

@@ -1,0 +1,103 @@
+﻿@model Public_MVC.Context.ApartmentsContext
+@using Public_MVC.Extensions
+@using Public_MVC.Models
+@{
+
+    var cityCookie = Request.Cookies["city"];
+    var roomsCookie = Request.Cookies["rooms"];
+    var adultsCookie = Request.Cookies["adults"];
+    var childrenCookie = Request.Cookies["children"];
+    var sortCookie = Request.Cookies["sort"];
+
+    ViewBag.Title = "Index";
+}
+
+
+
+<h2>Apartments</h2>
+
+<form class="form-inline">
+    <div class="form-group">
+        <label for="City">City:</label>
+        <select class="form-control" id="ddlCities">
+            <option value="Any">Any</option>
+            @foreach (var city in Model.Cities.OrderBy(c => c.Name))
+            {
+                <option value="@city.Name" @(cityCookie?.Value == city.Name ? "selected" : "")>@city.Name</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="TotalRooms">Total Rooms</label>
+        <input type="number" class="form-control" id="totalRooms" min="0" step="1" value="@(roomsCookie != null ? roomsCookie.Value : "")" />
+
+    </div>
+
+    <div class="form-group">
+        <label for="MaxAdults">Max Adults</label>
+        <input type="number" class="form-control" id="maxAdults" min="0" step="1" value="@(adultsCookie != null ? adultsCookie.Value : "")" />
+    </div>
+
+    <div class="form-group">
+        <label for="MaxChildren">Max Children</label>
+        <input type="number" class="form-control" id="maxChildren" min="0" step="1" value="@(childrenCookie != null ? childrenCookie.Value : "")">
+    </div>
+    <button type="button" id="btnFilter" class="btn btn-primary">Filter</button>
+</form>
+
+
+<div class="form-group">
+    <label for="sortByPrice">Sort By Price:</label>
+    <select class="form-control" id="sortByPrice" name="sortByPrice">
+        <option value="default" @(sortCookie != null && sortCookie.Value == "default" ? "selected" : "")>Default</option>
+        <option value="ascending" @(sortCookie != null && sortCookie.Value == "ascending" ? "selected" : "")>Ascending</option>
+        <option value="descending" @(sortCookie != null && sortCookie.Value == "descending" ? "selected" : "")>Descending</option>
+    </select>
+</div>
+
+<div id="apartmentsContainer">
+
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(window).on('load', function () {
+        filterApartments();
+    });
+
+    $(document).ready(function () {
+        $("#btnFilter").click(function () {
+            filterApartments();
+        });
+    });
+
+    $("#sortByPrice").change(function () {
+        filterApartments();
+    });
+
+    function filterApartments() {
+
+        var city = $("#ddlCities").val();
+
+        if (city == "Any") {
+            city = null
+        }
+        var totalRooms = $("#totalRooms").val();
+        var maxAdults = $("#maxAdults").val();
+        var maxChildren = $("#maxChildren").val();
+        var sortByPrice = $("#sortByPrice").val();
+
+        $.ajax({
+            type: "Post",
+            url: "@Url.Action("Filter", "Apartments")",
+            data: { city: city, totalRooms: totalRooms, maxAdults: maxAdults, maxChildren: maxChildren, sortByPrice: sortByPrice },
+            success: function (result) {
+                $("#apartmentsContainer").html(result);
+            }
+        });
+    }
+</script>
+
+

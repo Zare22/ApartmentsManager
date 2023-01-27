@@ -5,40 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/MyCss/CardsAndDetails.css")
     @Scripts.Render("~/bundles/modernizr")
+
+    <link rel="stylesheet"
+          href="~/Content/jquery.fancybox.css"
+          type="text/css"
+          media="screen" />
 
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" title="more options">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+    <div class="container" style="display: flex; flex-direction: column; min-height: 100vh;">
+        <main>
+            <div class="navbar navbar-inverse navbar-fixed-top">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" title="more options">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        @Html.ActionLink("Rwa", "Index", "Apartments", new { area = "" }, new { @class = "navbar-brand" })
+                    </div>
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li>@Html.ActionLink("Apartments", "Index", "Apartments")</li>
+                        </ul>
+                        @Html.Partial("_LoginPartial")
+                    </div>
+                </div>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-                @Html.Partial("_LoginPartial")
+            <div class="body-content" style="width: 100%;">
+                @RenderBody()
             </div>
-        </div>
-    </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </main>
+
+        <footer class="pt-3 bg-dark">
+            <p class="text-center">&copy; @DateTime.Now.Year Leo Žarković</p>
+            <p class="text-center">Algebra University College</p>
         </footer>
     </div>
 
+    
+
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/Scripts/jquery.fancybox.pack.js")
     @RenderSection("scripts", required: false)
+
+    @*<script type="text/javascript" src="~/Scripts/jquery.fancybox.pack.js"></script>*@
+    <script>
+        $(document).ready(function () {
+            $(".fancy-photo").fancybox({
+                cyclic: true,
+                onUpdate: function () {
+                    $(".fancybox-nav span").css({
+                        visibility: "visible"
+                    });
+                    return;
+                },
+                afterClose: function () {
+                    $(".fancybox-nav span").css({
+                        visibility: "hidden"
+                    });
+                    return;
+                }
+            });
+        });
+    </script>
 </body>
 </html>

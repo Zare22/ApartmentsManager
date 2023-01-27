@@ -1,0 +1,139 @@
+﻿@model Public_MVC.Models.Apartment
+@using Public_MVC.Extensions
+@{
+    ViewBag.Title = "Details";
+}
+
+
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h3>@Model.Name</h3>
+        </div>
+        <div class="card-body">
+            <div class="card-img-top-container">
+                @foreach (var image in Model.ApartmentPictures)
+                {
+                    <a class="fancy-photo"
+                       href="data:image/png;base64,@Convert.ToBase64String(image.Base64Content.FromBase64String())"
+                       rel="group">
+                        <img class="card-img-top thumbnail-image" src="data:image/png;base64,@Convert.ToBase64String(image.Base64Content.FromBase64String())" alt="...">
+                    </a>
+                }
+            </div>
+            <div class="card-text">
+                <dl class="row">
+                    <dt class="col-sm-3">Name</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Name)</dd>
+
+                    <dt class="col-sm-3">Status</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.ApartmentStatus.Name)</dd>
+
+                    <dt class="col-sm-3">City</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.City.Name) </dd>
+
+                    <dt class="col-sm-3">Addres</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Address) </dd>
+
+                    <dt class="col-sm-3">Price</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Price) </dd>
+
+                    <dt class="col-sm-3">Adults</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.MaxAdults) </dd>
+
+                    <dt class="col-sm-3">Children</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.MaxChildren) </dd>
+
+                    <dt class="col-sm-3">Rooms</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.TotalRooms) </dd>
+
+                    <dt class="col-sm-3">Beach distance</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.BeachDistance) </dd>
+                </dl>
+            </div>
+            <div class="card-text">
+                @Html.ActionLink("Back to all apartments", "Index")
+            </div>
+
+            <form id="review-form">
+                <div class="form-group">
+                    <label for="details">Details:</label>
+                    <textarea class="form-control" name="details" id="details"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="stars">Stars:</label>
+                    <input type="number" class="form-control" name="stars" id="stars" min="1" max="5">
+                </div>
+                <input type="hidden" name="apartmentId" value="@Model.Id">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
+            <form id="reserve-form">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" class="form-control" id="phone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="text" class="form-control" id="address" name="address" required>
+                </div>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                </div>
+                <input type="hidden" name="apartmentId" value="@Model.Id">
+                <button type="submit" class="btn btn-primary">Reserve</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#review-form').on('submit', function (e) {
+            e.preventDefault();
+
+            var formData = $(this).serialize();
+
+            $.ajax({
+                type: 'POST',
+                url: "@Url.Action("LeaveReview", "Apartments")",
+                data: formData,
+                success: function (response) {
+                    // Handle the success response here
+                    alert('Review submitted successfully!');
+                },
+                error: function (xhr, status, error) {
+                    // Handle the error response here
+                    alert('An error occurred while submitting the review. Please try again later.');
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+    $("#reserve-form").submit(function (e) {
+        e.preventDefault();
+        var formData = $(this).serialize();
+
+        $.ajax({
+            url: "@Url.Action("ReserveApartment", "Apartments")",
+            type: "POST",
+            data: formData,
+            success: function (response) {
+                if (response.success) {
+                    alert("Apartment reserved successfully!");
+                } else {
+                    alert("An error occurred while reserving the apartment.");
+                }
+            }
+        });
+    });
+
+</script>
