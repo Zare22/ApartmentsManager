@@ -16,7 +16,7 @@ namespace Public_MVC.Controllers
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;
-        private ApplicationUserManager _userManager;
+        private UserManager<AspnetUsers> _userManager;
 
         public AccountController()
         {
