@@ -23,7 +23,7 @@
             <option value="Any">Any</option>
             @foreach (var city in Model.Cities.OrderBy(c => c.Name))
             {
-                <option value="@city.Name" @(cityCookie.Value == city.Name ? "selected" : "")>@city.Name</option>
+                <option value="@city.Name" @(cityCookie?.Value == city.Name ? "selected" : "")>@city.Name</option>
             }
         </select>
     </div>
