@@ -172,7 +172,7 @@ namespace Public_MVC.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+                    //await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
@@ -480,19 +480,19 @@ namespace Public_MVC.Controllers
             {
                 LoginProvider = provider;
                 RedirectUri = redirectUri;
-                UserId = userId;
+                Id = userId;
             }
 
             public string LoginProvider { get; set; }
             public string RedirectUri { get; set; }
-            public string UserId { get; set; }
+            public string Id { get; set; }
 
             public override void ExecuteResult(ControllerContext context)
             {
                 var properties = new AuthenticationProperties { RedirectUri = RedirectUri };
-                if (UserId != null)
+                if (Id != null)
                 {
-                    properties.Dictionary[XsrfKey] = UserId;
+                    properties.Dictionary[XsrfKey] = Id;
                 }
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
