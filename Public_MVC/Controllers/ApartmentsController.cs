@@ -169,7 +169,7 @@ namespace Public_MVC.Controllers
         }
 
 
-
+        //Situacija kada nema povezanih slika
         public FileResult GetImage(int imageId)
         {
             var image = db.ApartmentPictures.FirstOrDefault(p => p.Id == imageId);

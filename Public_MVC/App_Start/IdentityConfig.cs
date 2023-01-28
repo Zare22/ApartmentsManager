@@ -14,25 +14,6 @@ using Public_MVC.Models;
 
 namespace Public_MVC
 {
-    public class EmailService : IIdentityMessageService
-    {
-        public Task SendAsync(IdentityMessage message)
-        {
-            // Plug in your email service here to send an email.
-            return Task.FromResult(0);
-        }
-    }
-
-    public class SmsService : IIdentityMessageService
-    {
-        public Task SendAsync(IdentityMessage message)
-        {
-            // Plug in your SMS service here to send a text message.
-            return Task.FromResult(0);
-        }
-    }
-
-    // Configure the application user manager used in this application. UserManager is defined in ASP.NET Identity and is used by the application.
     public class ApplicationUserManager : UserManager<MyUser, int>
     {
         public ApplicationUserManager(IUserStore<MyUser, int> store)
@@ -43,14 +24,14 @@ namespace Public_MVC
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context) 
         {
             var manager = new ApplicationUserManager(new UserStore<MyUser, MyRole, int, MyLogin, MyUserRole, MyClaim>(context.Get<ApplicationDbContext>()));
-            // Configure validation logic for usernames
+
             manager.UserValidator = new UserValidator<MyUser, int>(manager)
             {
                 AllowOnlyAlphanumericUserNames = false,
                 RequireUniqueEmail = true
             };
 
-            // Configure validation logic for passwords
+            
             manager.PasswordValidator = new PasswordValidator
             {
                 RequiredLength = 6,
@@ -60,24 +41,10 @@ namespace Public_MVC
                 RequireUppercase = true,
             };
 
-            // Configure user lockout defaults
-            manager.UserLockoutEnabledByDefault = true;
+            manager.UserLockoutEnabledByDefault = false;
             manager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(5);
             manager.MaxFailedAccessAttemptsBeforeLockout = 5;
 
-            // Register two factor authentication providers. This application uses Phone and Emails as a step of receiving a code for verifying the user
-            // You can write your own provider and plug it in here.
-            //manager.RegisterTwoFactorProvider("Phone Code", new PhoneNumberTokenProvider<MyUser, int>
-            //{
-            //    MessageFormat = "Your security code is {0}"
-            //});
-            //manager.RegisterTwoFactorProvider("Email Code", new EmailTokenProvider<MyUser, int>
-            //{
-            //    Subject = "Security Code",
-            //    BodyFormat = "Your security code is {0}"
-            //});
-            //manager.EmailService = new EmailService();
-            //manager.SmsService = new SmsService();
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
             {
@@ -88,7 +55,6 @@ namespace Public_MVC
         }
     }
 
-    // Configure the application sign-in manager which is used in this application.
     public class ApplicationSignInManager : SignInManager<MyUser, int>
     {
         public ApplicationSignInManager(ApplicationUserManager userManager, IAuthenticationManager authenticationManager)
