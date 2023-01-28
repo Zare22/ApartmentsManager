@@ -6,6 +6,7 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
 using Public_MVC.Models;
+using static ApplicationDbContext;
 
 namespace Public_MVC
 {
