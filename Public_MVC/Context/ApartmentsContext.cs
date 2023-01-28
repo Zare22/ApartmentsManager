@@ -1,3 +1,4 @@
+using Microsoft.AspNet.Identity.EntityFramework;
 using Public_MVC.Models;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
