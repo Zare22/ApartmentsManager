@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using Public_MVC.Context;
 using Public_MVC.Extensions;
 using Public_MVC.Models;
+using Recaptcha.Web.Mvc;
 
 namespace Public_MVC.Controllers
 {
@@ -25,11 +26,13 @@ namespace Public_MVC.Controllers
 
         public ActionResult Details(int? id)
         {
+            Apartment apartment = db.Apartments.Find(id);
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Apartment apartment = db.Apartments.Find(id);
+
             if (apartment == null)
             {
                 return HttpNotFound();
@@ -105,26 +108,41 @@ namespace Public_MVC.Controllers
         [HttpPost]
         public ActionResult LeaveReview(int apartmentId, ApartmentReview review)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+                review.UserId = 1;
+                review.ApartmentId = apartmentId;
+                db.ApartmentReviews.Add(review);
+                db.SaveChanges();
+                return Json(new { success = true, message = "Review submitted successfully!" });
+
             }
-
-            review.UserId = 1;
-            review.ApartmentId = apartmentId;
-            db.ApartmentReviews.Add(review);
-            db.SaveChanges();
-
-            return Json(new { success = true });
+            catch (Exception)
+            {
+                return Json(new { success = true, message = "An error occurred while submitting the review. Please try again later!" });
+            }
         }
 
         [HttpPost]
-        public ActionResult ReserveApartment(string email, string phone, string address, string username, int apartmentId)
+        public ActionResult ReserveApartment(string email, string phone, string address, int apartmentId)
         {
+            var apartment = db.Apartments.Find(apartmentId);
+
+            var recaptchaHelper = this.GetRecaptchaVerificationHelper();
+            if (String.IsNullOrEmpty(recaptchaHelper.Response))
+            {
+                return Json(new { success = false, message = "Captcha answer cannot be empty!" });
+            }
+
+            var recaptchaResult = recaptchaHelper.VerifyRecaptchaResponse();
+            if (!recaptchaResult.Success)
+            {
+                return Json(new { success = false, message = "Incorrect captcha answer!" });
+            }
+
             try
             {
-                var apartment = db.Apartments.Find(apartmentId);
-
                 var user = new AspNetUser
                 {
                     CreatedAt = DateTime.Now,
@@ -137,14 +155,15 @@ namespace Public_MVC.Controllers
                     LockoutEnabled = false,
                     AccessFailedCount = 0,
                     Address = address,
-                    UserName = username
+                    UserName = email
                 };
 
 
                 db.AspNetUsers.Add(user);
-                apartment.ApartmentStatus = db.ApartmentStatus.FirstOrDefault(s => s.Id == 3);
 
-                
+                apartment.ApartmentStatus = db.ApartmentStatus.FirstOrDefault(s => s.Id == 2);
+
+
 
                 db.ApartmentReservations.Add(new ApartmentReservation
                 {
@@ -152,19 +171,19 @@ namespace Public_MVC.Controllers
                     Guid = Guid.NewGuid(),
                     CreatedAt = DateTime.Now,
                     UserAddress = user.Address,
-                    UserName = username,
-                    UserEmail = email,
-                    UserPhone = phone
+                    UserName = user.UserName,
+                    UserEmail = user.Email,
+                    UserPhone = user.PhoneNumber
                 });
-                
+
                 db.SaveChanges();
 
 
-                return Json(new { success = true });
+                return Json(new { success = true, message = "Apartment reserved successfully!" });
             }
             catch (Exception)
             {
-                return Json(new { success = false });
+                return Json(new { success = false, message = "An error occurred while reserving the apartment." });
             }
         }
 

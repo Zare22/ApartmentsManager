@@ -106,3 +106,4 @@ Y:\Projects\Visual Studio 2022\ApartmentsManager\Public_MVC\bin\System.Web.WebPa
 Y:\Projects\Visual Studio 2022\ApartmentsManager\Public_MVC\obj\Debug\Public_MVC.csproj.CopyComplete
 Y:\Projects\Visual Studio 2022\ApartmentsManager\Public_MVC\obj\Debug\Public_MVC.dll
 Y:\Projects\Visual Studio 2022\ApartmentsManager\Public_MVC\obj\Debug\Public_MVC.pdb
+Y:\Projects\Visual Studio 2022\ApartmentsManager\Public_MVC\bin\Recaptcha.Web.dll
