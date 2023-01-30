@@ -12,13 +12,38 @@
     ViewBag.Title = "Index";
 }
 
+<style>
+    .form-inline {
+        margin-top: 1.25rem;
+        display: flex;
+        justify-content: center;
+    }
 
+    .form-group {
+        margin-inline: 0.5rem;
+    }
 
-<h2>Apartments</h2>
+    .card {
+        margin-top: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-<form class="form-inline">
+    .card-text {
+        display: flex;
+        justify-content: space-around
+    }
+
+    .link {
+        display: flex;
+        justify-content: space-around
+    }
+</style>
+
+<div class="form-inline">
     <div class="form-group">
-        <label for="City">City:</label>
+        <label for="ddlCities">City:</label>
         <select class="form-control" id="ddlCities">
             <option value="Any">Any</option>
             @foreach (var city in Model.Cities.OrderBy(c => c.Name))
@@ -28,34 +53,36 @@
         </select>
     </div>
     <div class="form-group">
-        <label for="TotalRooms">Total Rooms</label>
+        <label for="totalRooms">Total Rooms:</label>
         <input type="number" class="form-control" id="totalRooms" min="0" step="1" value="@(roomsCookie != null ? roomsCookie.Value : "")" />
 
     </div>
 
     <div class="form-group">
-        <label for="MaxAdults">Max Adults</label>
+        <label for="maxAdults">Max adults:</label>
         <input type="number" class="form-control" id="maxAdults" min="0" step="1" value="@(adultsCookie != null ? adultsCookie.Value : "")" />
     </div>
 
     <div class="form-group">
-        <label for="MaxChildren">Max Children</label>
+        <label for="maxChildren">Max children:</label>
         <input type="number" class="form-control" id="maxChildren" min="0" step="1" value="@(childrenCookie != null ? childrenCookie.Value : "")">
     </div>
     <button type="button" id="btnFilter" class="btn btn-primary">Filter</button>
-</form>
-
-
-<div class="form-group">
-    <label for="sortByPrice">Sort By Price:</label>
-    <select class="form-control" id="sortByPrice" name="sortByPrice">
-        <option value="default" @(sortCookie != null && sortCookie.Value == "default" ? "selected" : "")>Default</option>
-        <option value="ascending" @(sortCookie != null && sortCookie.Value == "ascending" ? "selected" : "")>Ascending</option>
-        <option value="descending" @(sortCookie != null && sortCookie.Value == "descending" ? "selected" : "")>Descending</option>
-    </select>
 </div>
 
-<div id="apartmentsContainer">
+<div class="form-inline">
+    <div class="form-group">
+        <label for="sortByPrice">Sort by price:</label>
+        <select class="form-control" id="sortByPrice" name="sortByPrice">
+            <option value="default" @(sortCookie != null && sortCookie.Value == "default" ? "selected" : "")>Default</option>
+            <option value="ascending" @(sortCookie != null && sortCookie.Value == "ascending" ? "selected" : "")>Ascending</option>
+            <option value="descending" @(sortCookie != null && sortCookie.Value == "descending" ? "selected" : "")>Descending</option>
+        </select>
+    </div>
+</div>
+
+
+<div id="apartmentsContainer" style="margin-top: 1.25rem">
 
 </div>
 

@@ -41,21 +41,21 @@ namespace DataLayer.DAL
                     {
                         Apartment apartment = new Apartment()
                         {
-                            Id = (int)reader["Id"],
-                            Guid = (Guid)reader["Guid"],
-                            CreatedAt = (DateTime)reader["CreatedAt"],
-                            DeletedAt = reader.IsDBNull(reader.GetOrdinal("DeletedAt")) ? (DateTime?)null : (DateTime)reader["DeletedAt"],
-                            Status = (Status)reader["Status"],
+                            Id = (int)reader[nameof(Apartment.Id)],
+                            Guid = (Guid)reader[nameof(Apartment.Guid)],
+                            CreatedAt = (DateTime)reader[nameof(Apartment.CreatedAt)],
+                            DeletedAt = reader.IsDBNull(reader.GetOrdinal(nameof(Apartment.DeletedAt))) ? (DateTime?)null : (DateTime)reader[nameof(Apartment.DeletedAt)],
+                            Status = (Status)reader[nameof(Apartment.Status)],
                             CityName = reader.IsDBNull(reader.GetOrdinal("City")) ? null : (string)reader["City"],
-                            Address = (string)reader["Address"],
-                            Name = (string)reader["Name"],
-                            Price = (decimal)reader["Price"],
-                            MaxAdults = (int)reader["MaxAdults"],
-                            MaxChildren = (int)reader["MaxChildren"],
-                            TotalRooms = (int)reader["TotalRooms"],
-                            BeachDistance = (int)reader["BeachDistance"],
-                            Tags = GetApartmentTags((int)reader["Id"]),
-                            Images = GetApartmentImages((int)reader["Id"])
+                            Address = (string)reader[nameof(Apartment.Address)],
+                            Name = (string)reader[nameof(Apartment.Name)],
+                            Price = (decimal)reader[nameof(Apartment.Price)],
+                            MaxAdults = (int)reader[nameof(Apartment.MaxAdults)],
+                            MaxChildren = (int)reader[nameof(Apartment.MaxChildren)],
+                            TotalRooms = (int)reader[nameof(Apartment.TotalRooms)],
+                            BeachDistance = (int)reader[nameof(Apartment.BeachDistance)],
+                            Tags = GetApartmentTags((int)reader[nameof(Apartment.Id)]),
+                            Images = GetApartmentImages((int)reader[nameof(Apartment.Id)])
                         };
                         apartments.Add(apartment);
                     }
@@ -72,17 +72,17 @@ namespace DataLayer.DAL
                 using (SqlCommand command = new SqlCommand(nameof(GetApartmentTags), connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("@ApartmentId", apartmentId);
+                    command.Parameters.AddWithValue(nameof(apartmentId), apartmentId);
                     SqlDataReader reader = command.ExecuteReader();
                     List<Tag> tags = new List<Tag>();
                     while (reader.Read())
                     {
                         Tag tag = new Tag()
                         {
-                            Id = (int)reader["Id"],
-                            Guid = (Guid)reader["Guid"],
-                            CreatedAt = (DateTime)reader["CreatedAt"],
-                            Name = (string)reader["Name"]
+                            Id = (int)reader[nameof(Tag.Id)],
+                            Guid = (Guid)reader[nameof(Tag.Guid)],
+                            CreatedAt = (DateTime)reader[nameof(Tag.CreatedAt)],
+                            Name = (string)reader[nameof(Tag.Name)]
                         };
                         tags.Add(tag);
                     }
@@ -99,17 +99,17 @@ namespace DataLayer.DAL
                 using (SqlCommand command = new SqlCommand(nameof(GetApartmentImages), connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("@ApartmentId", apartmentId);
+                    command.Parameters.AddWithValue(nameof(apartmentId), apartmentId);
                     SqlDataReader reader = command.ExecuteReader();
                     List<Image> images = new List<Image>();
                     while (reader.Read())
                     {
                         Image image = new Image()
                         {
-                            Id = (int)reader["Id"],
-                            Name = (string)reader["Name"],
-                            Base64Content = (string)reader["Base64Content"],
-                            IsRepresentative = (bool)reader["IsRepresentative"]
+                            Id = (int)reader[nameof(Image.Id)],
+                            Name = (string)reader[nameof(Image.Name)],
+                            Base64Content = (string)reader[nameof(Image.Base64Content)],
+                            IsRepresentative = (bool)reader[nameof(Image.IsRepresentative)]
                         };
                         images.Add(image);
                     }
@@ -118,16 +118,16 @@ namespace DataLayer.DAL
             }
         }
 
-        private bool TagInUse(int tagId)
+        private bool GetTagInUse(int tagId)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
 
-                using (SqlCommand command = new SqlCommand("GetTagInUse", connection))
+                using (SqlCommand command = new SqlCommand(nameof(GetTagInUse), connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("@tagId", tagId);
+                    command.Parameters.AddWithValue(nameof(tagId), tagId);
 
                     bool isInUse = (bool)command.ExecuteScalar();
                     return isInUse;
@@ -150,16 +150,16 @@ namespace DataLayer.DAL
                     {
                         Tag tag = new Tag
                         {
-                            Id = (int)reader["Id"],
-                            Guid = (Guid)reader["Guid"],
-                            CreatedAt = (DateTime)reader["CreatedAt"],
-                            Name = (string)reader["Name"]
+                            Id = (int)reader[nameof(Tag.Id)],
+                            Guid = (Guid)reader[nameof(Tag.Guid)],
+                            CreatedAt = (DateTime)reader[nameof(Tag.CreatedAt)],
+                            Name = (string)reader[nameof(Tag.Name)]
                         };
                         tags.Add(tag);
                     }
                     foreach (var tag in tags)
                     {
-                        tag.IsInUse = TagInUse(tag.Id);
+                        tag.IsInUse = GetTagInUse(tag.Id);
                     }
                     return tags;
                 }
@@ -180,21 +180,21 @@ namespace DataLayer.DAL
                     {
                         User user = new User()
                         {
-                            Id = (int)reader["Id"],
-                            Guid = (Guid)reader["Guid"],
-                            CreatedAt = (DateTime)reader["CreatedAt"],
-                            DeletedAt = reader.IsDBNull(reader.GetOrdinal("DeletedAt")) ? (DateTime?)null : (DateTime)reader["DeletedAt"],
-                            Email = (string)reader["Email"],
-                            EmailConfirmed = (bool)reader["EmailConfirmed"],
-                            PasswordHash = reader.IsDBNull(reader.GetOrdinal("PasswordHash")) ? null : (string)reader["PasswordHash"],
-                            SecurityStamp = reader.IsDBNull(reader.GetOrdinal("SecurityStamp")) ? null : (string)reader["SecurityStamp"],
-                            PhoneNumber = reader.IsDBNull(reader.GetOrdinal("PhoneNumber")) ? null : (string)reader["PhoneNumber"],
-                            PhoneNumberConfirmed = (bool)reader["PhoneNumberConfirmed"],
-                            LockoutEndDateUtc = reader.IsDBNull(reader.GetOrdinal("LockoutEndDateUtc")) ? (DateTime?)null : (DateTime)reader["LockoutEndDateUtc"],
-                            LockoutEnabled = (bool)reader["LockoutEnabled"],
-                            AccessFailedCount = (int)reader["AccessFailedCount"],
-                            UserName = (string)reader["UserName"],
-                            Address = reader.IsDBNull(reader.GetOrdinal("Address")) ? null : (string)reader["Address"]
+                            Id = (int)reader[nameof(User.Id)],
+                            Guid = (Guid)reader[nameof(User.Guid)],
+                            CreatedAt = (DateTime)reader[nameof(User.CreatedAt)],
+                            DeletedAt = reader.IsDBNull(reader.GetOrdinal(nameof(User.DeletedAt))) ? (DateTime?)null : (DateTime)reader[nameof(User.DeletedAt)],
+                            Email = (string)reader[nameof(User.Email)],
+                            EmailConfirmed = (bool)reader[nameof(User.EmailConfirmed)],
+                            PasswordHash = reader.IsDBNull(reader.GetOrdinal(nameof(User.PasswordHash))) ? null : (string)reader[nameof(User.PasswordHash)],
+                            SecurityStamp = reader.IsDBNull(reader.GetOrdinal(nameof(User.SecurityStamp))) ? null : (string)reader[nameof(User.SecurityStamp)],
+                            PhoneNumber = reader.IsDBNull(reader.GetOrdinal(nameof(User.PhoneNumber))) ? null : (string)reader[nameof(User.PhoneNumber)],
+                            PhoneNumberConfirmed = (bool)reader[nameof(User.PhoneNumberConfirmed)],
+                            LockoutEndDateUtc = reader.IsDBNull(reader.GetOrdinal(nameof(User.LockoutEndDateUtc))) ? (DateTime?)null : (DateTime)reader[nameof(User.LockoutEndDateUtc)],
+                            LockoutEnabled = (bool)reader[nameof(User.LockoutEnabled)],
+                            AccessFailedCount = (int)reader[nameof(User.AccessFailedCount)],
+                            UserName = (string)reader[nameof(User.UserName)],
+                            Address = reader.IsDBNull(reader.GetOrdinal(nameof(User.Address))) ? null : (string)reader[nameof(User.Address)]
                         };
                         users.Add(user);
                     }
@@ -275,7 +275,7 @@ namespace DataLayer.DAL
                 {
                     command.CommandType = CommandType.StoredProcedure;
 
-                    command.Parameters.Add("@ApartmentId", SqlDbType.Int).Value = apartmentId;
+                    command.Parameters.Add(nameof(apartmentId), SqlDbType.Int).Value = apartmentId;
                     command.Parameters.Add(nameof(Apartment.CityName), SqlDbType.NVarChar, 50).Value = cityName;
 
 
@@ -292,7 +292,7 @@ namespace DataLayer.DAL
                 using (SqlCommand command = new SqlCommand(nameof(AddImageToApartment), connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("@ApartmentId", apartmentId);
+                    command.Parameters.AddWithValue(nameof(apartmentId), apartmentId);
                     command.Parameters.AddWithValue(nameof(Image.Base64Content), image.Base64Content);
                     command.Parameters.AddWithValue(nameof(Image.Name), image.Name);
                     command.Parameters.AddWithValue(nameof(Image.CreatedAt), DateTime.Now);
@@ -308,10 +308,10 @@ namespace DataLayer.DAL
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                using (SqlCommand command = new SqlCommand("AddTagToApartment", connection))
+                using (SqlCommand command = new SqlCommand(nameof(AddTagToApartment), connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("@ApartmentId", apartmentId);
+                    command.Parameters.AddWithValue(nameof(apartmentId), apartmentId);
                     command.Parameters.AddWithValue("@TagId", tag.Id);
 
                     command.ExecuteNonQuery();
@@ -328,7 +328,7 @@ namespace DataLayer.DAL
                 using (SqlCommand command = new SqlCommand(nameof(CreateTag), connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("@tagName", tagName);
+                    command.Parameters.AddWithValue(nameof(tagName), tagName);
                     command.ExecuteNonQuery();
                 }
             }
@@ -403,7 +403,7 @@ namespace DataLayer.DAL
         private void DeleteImagesFromApartment(IList<Image> images, int apartmentId)
         {
             DataTable imageIds = new DataTable();
-            imageIds.Columns.Add("Id", typeof(int));
+            imageIds.Columns.Add(nameof(Image.Id), typeof(int));
 
             foreach (Image image in images)
             {
@@ -413,12 +413,26 @@ namespace DataLayer.DAL
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                using (SqlCommand command = new SqlCommand("DeleteImagesFromApartment", connection))
+                using (SqlCommand command = new SqlCommand(nameof(DeleteImagesFromApartment), connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("@ApartmentId", apartmentId);
+                    command.Parameters.AddWithValue(nameof(apartmentId), apartmentId);
                     command.Parameters.AddWithValue("@ImageIds", imageIds).SqlDbType = SqlDbType.Structured;
 
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void ConfirmReservation(int apartmentId)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(nameof(ConfirmReservation), connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue(nameof(apartmentId), apartmentId);
                     command.ExecuteNonQuery();
                 }
             }

@@ -126,5 +126,25 @@ namespace Admin_WebForm
         {
             Response.Redirect("ApartmentManager.aspx");
         }
+
+        protected void btnConfirmReservation_Click(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+            int id = Convert.ToInt32(btn.CommandArgument);
+            ((IRepository)Application["database"]).ConfirmReservation(id);
+            LoadAfterDelete();
+        }
+
+        protected void btnConfirmReservation_DataBinding(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+            HiddenField hidden = (HiddenField)btn.NamingContainer.FindControl("hiddenIsReserved");
+            bool showRegister = true;
+            if (hidden.Value == "Reserved")
+            {
+                showRegister = false;
+            }
+            btn.Visible = !showRegister;
+        }
     }
 }

@@ -53,7 +53,8 @@ namespace Public_MVC.Controllers
         [HttpPost]
         public ActionResult Filter(int? totalRooms, int? maxAdults, int? maxChildren, string city, string sortByPrice)
         {
-            var apartments = db.Apartments.Where(a => a.IsDeleted == false);
+            var apartments = db.Apartments.Where(a => a.IsDeleted == false).Where(a => a.ApartmentStatus.Name == "Slobodno");
+
 
             if (totalRooms.HasValue || maxAdults.HasValue || maxChildren.HasValue || !string.IsNullOrEmpty(city))
             {
@@ -106,12 +107,15 @@ namespace Public_MVC.Controllers
 
 
         [HttpPost]
-        public ActionResult LeaveReview(int apartmentId, ApartmentReview review)
+        public ActionResult LeaveReview(int apartmentId, string userName, ApartmentReview review)
         {
+            
             try
             {
-
-                review.UserId = 1;
+                var user = db.AspNetUsers.Where(u => u.Email == userName).FirstOrDefault();
+                review.UserId = user.Id;
+                review.CreatedAt = DateTime.Now;
+                review.Guid = Guid.NewGuid();
                 review.ApartmentId = apartmentId;
                 db.ApartmentReviews.Add(review);
                 db.SaveChanges();
@@ -125,56 +129,52 @@ namespace Public_MVC.Controllers
         }
 
         [HttpPost]
-        public ActionResult ReserveApartment(string email, string phone, string address, int apartmentId)
+        public ActionResult ReserveApartment(string email, string phone, string address, int apartmentId, int? userId)
         {
             var apartment = db.Apartments.Find(apartmentId);
 
             var recaptchaHelper = this.GetRecaptchaVerificationHelper();
-            if (String.IsNullOrEmpty(recaptchaHelper.Response))
-            {
-                return Json(new { success = false, message = "Captcha answer cannot be empty!" });
-            }
 
-            var recaptchaResult = recaptchaHelper.VerifyRecaptchaResponse();
-            if (!recaptchaResult.Success)
+            if (recaptchaHelper.Response != null)
             {
-                return Json(new { success = false, message = "Incorrect captcha answer!" });
+                if (String.IsNullOrEmpty(recaptchaHelper.Response))
+                {
+                    return Json(new { success = false, message = "Captcha answer cannot be empty!" });
+                }
+
+                var recaptchaResult = recaptchaHelper.VerifyRecaptchaResponse();
+                if (!recaptchaResult.Success)
+                {
+                    return Json(new { success = false, message = "Incorrect captcha answer!" });
+                }
             }
+            
+
+            
 
             try
             {
-                var user = new AspNetUser
-                {
-                    CreatedAt = DateTime.Now,
-                    Guid = Guid.NewGuid(),
-                    IsAdmin = false,
-                    Email = email,
-                    EmailConfirmed = true,
-                    PhoneNumber = phone,
-                    PhoneNumberConfirmed = true,
-                    LockoutEnabled = false,
-                    AccessFailedCount = 0,
-                    Address = address,
-                    UserName = email
-                };
-
-
-                db.AspNetUsers.Add(user);
-
-                apartment.ApartmentStatus = db.ApartmentStatus.FirstOrDefault(s => s.Id == 2);
-
-
-
-                db.ApartmentReservations.Add(new ApartmentReservation
+                ApartmentReservation reservation = new ApartmentReservation
                 {
                     ApartmentId = apartmentId,
                     Guid = Guid.NewGuid(),
-                    CreatedAt = DateTime.Now,
-                    UserAddress = user.Address,
-                    UserName = user.UserName,
-                    UserEmail = user.Email,
-                    UserPhone = user.PhoneNumber
-                });
+                    CreatedAt = DateTime.Now
+                };
+
+                if (userId != null)
+                {
+                    reservation.UserId = userId;
+                }
+                else
+                {
+                    reservation.UserName = email;
+                    reservation.UserEmail = email;
+                    reservation.UserAddress = address;
+                    reservation.UserPhone = phone;
+                }
+                
+                //Set to reserved
+                apartment.ApartmentStatus = db.ApartmentStatus.FirstOrDefault(s => s.Id == 2);
 
                 db.SaveChanges();
 

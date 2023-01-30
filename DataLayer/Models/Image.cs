@@ -14,10 +14,16 @@ namespace DataLayer.Models
         public DateTime? DeletedAt { get; set; }
         public string Base64Content { get; set; }
         public bool IsRepresentative { get; set; }
-        public bool IsNew { get; set; }
         public string ImageUrl { get; set; }
 
         public Image() { }
+
+        public Image(string name, string base64Content, bool isRepresentative)
+        {
+            Name = name;
+            Base64Content = base64Content;
+            IsRepresentative = isRepresentative;
+        }
 
         public Image(HttpPostedFile file)
         {
