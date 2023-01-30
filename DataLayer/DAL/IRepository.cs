@@ -22,5 +22,6 @@ namespace DataLayer.DAL
         void UpdateApartment(Apartment apartment);
         void CreateTag(string tagName);
         void DeleteTag(int Id);
+        void ConfirmReservation(int apartmentId);
     }
 }

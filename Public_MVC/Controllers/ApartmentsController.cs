@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using Public_MVC.Context;
 using Public_MVC.Extensions;
 using Public_MVC.Models;
+using Recaptcha.Web.Mvc;
 
 namespace Public_MVC.Controllers
 {
@@ -25,11 +26,13 @@ namespace Public_MVC.Controllers
 
         public ActionResult Details(int? id)
         {
+            Apartment apartment = db.Apartments.Find(id);
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Apartment apartment = db.Apartments.Find(id);
+
             if (apartment == null)
             {
                 return HttpNotFound();
@@ -50,7 +53,8 @@ namespace Public_MVC.Controllers
         [HttpPost]
         public ActionResult Filter(int? totalRooms, int? maxAdults, int? maxChildren, string city, string sortByPrice)
         {
-            var apartments = db.Apartments.Where(a => a.IsDeleted == false);
+            var apartments = db.Apartments.Where(a => a.IsDeleted == false).Where(a => a.ApartmentStatus.Name == "Slobodno");
+
 
             if (totalRooms.HasValue || maxAdults.HasValue || maxChildren.HasValue || !string.IsNullOrEmpty(city))
             {
@@ -103,73 +107,88 @@ namespace Public_MVC.Controllers
 
 
         [HttpPost]
-        public ActionResult LeaveReview(int apartmentId, ApartmentReview review)
+        public ActionResult LeaveReview(int apartmentId, string userName, ApartmentReview review)
         {
-            if (!ModelState.IsValid)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            review.UserId = 1;
-            review.ApartmentId = apartmentId;
-            db.ApartmentReviews.Add(review);
-            db.SaveChanges();
-
-            return Json(new { success = true });
-        }
-
-        [HttpPost]
-        public ActionResult ReserveApartment(string email, string phone, string address, string username, int apartmentId)
-        {
+            
             try
             {
-                var apartment = db.Apartments.Find(apartmentId);
-
-                var user = new AspNetUser
-                {
-                    CreatedAt = DateTime.Now,
-                    Guid = Guid.NewGuid(),
-                    IsAdmin = false,
-                    Email = email,
-                    EmailConfirmed = true,
-                    PhoneNumber = phone,
-                    PhoneNumberConfirmed = true,
-                    LockoutEnabled = false,
-                    AccessFailedCount = 0,
-                    Address = address,
-                    UserName = username
-                };
-
-
-                db.AspNetUsers.Add(user);
-                apartment.ApartmentStatus = db.ApartmentStatus.FirstOrDefault(s => s.Id == 3);
-
-                
-
-                db.ApartmentReservations.Add(new ApartmentReservation
-                {
-                    ApartmentId = apartmentId,
-                    Guid = Guid.NewGuid(),
-                    CreatedAt = DateTime.Now,
-                    UserAddress = user.Address,
-                    UserName = username,
-                    UserEmail = email,
-                    UserPhone = phone
-                });
-                
+                var user = db.AspNetUsers.Where(u => u.Email == userName).FirstOrDefault();
+                review.UserId = user.Id;
+                review.CreatedAt = DateTime.Now;
+                review.Guid = Guid.NewGuid();
+                review.ApartmentId = apartmentId;
+                db.ApartmentReviews.Add(review);
                 db.SaveChanges();
+                return Json(new { success = true, message = "Review submitted successfully!" });
 
-
-                return Json(new { success = true });
             }
             catch (Exception)
             {
-                return Json(new { success = false });
+                return Json(new { success = true, message = "An error occurred while submitting the review. Please try again later!" });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult ReserveApartment(string email, string phone, string address, int apartmentId, int? userId)
+        {
+            var apartment = db.Apartments.Find(apartmentId);
+
+            var recaptchaHelper = this.GetRecaptchaVerificationHelper();
+
+            if (recaptchaHelper.Response != null)
+            {
+                if (String.IsNullOrEmpty(recaptchaHelper.Response))
+                {
+                    return Json(new { success = false, message = "Captcha answer cannot be empty!" });
+                }
+
+                var recaptchaResult = recaptchaHelper.VerifyRecaptchaResponse();
+                if (!recaptchaResult.Success)
+                {
+                    return Json(new { success = false, message = "Incorrect captcha answer!" });
+                }
+            }
+            
+
+            
+
+            try
+            {
+                ApartmentReservation reservation = new ApartmentReservation
+                {
+                    ApartmentId = apartmentId,
+                    Guid = Guid.NewGuid(),
+                    CreatedAt = DateTime.Now
+                };
+
+                if (userId != null)
+                {
+                    reservation.UserId = userId;
+                }
+                else
+                {
+                    reservation.UserName = email;
+                    reservation.UserEmail = email;
+                    reservation.UserAddress = address;
+                    reservation.UserPhone = phone;
+                }
+                
+                //Set to reserved
+                apartment.ApartmentStatus = db.ApartmentStatus.FirstOrDefault(s => s.Id == 2);
+
+                db.SaveChanges();
+
+
+                return Json(new { success = true, message = "Apartment reserved successfully!" });
+            }
+            catch (Exception)
+            {
+                return Json(new { success = false, message = "An error occurred while reserving the apartment." });
             }
         }
 
 
-
+        //Situacija kada nema povezanih slika
         public FileResult GetImage(int imageId)
         {
             var image = db.ApartmentPictures.FirstOrDefault(p => p.Id == imageId);

@@ -3,13 +3,27 @@
 @using Public_MVC.Extensions
 @{
 
-
     List<Apartment> list = Model.ToList();
+
+    foreach (var apartment in list)
+    {
+        if (apartment.ApartmentPictures.Count < 1)
+        {
+            Public_MVC.Models.ApartmentPicture defaultImage = new Public_MVC.Models.ApartmentPicture();
+            defaultImage.Name = "No_Image.jpg";
+            defaultImage.Base64Content = Convert.ToBase64String(System.IO.File.ReadAllBytes(Server.MapPath("~/Images/No_image.jpg")));
+
+            defaultImage.IsRepresentative = true;
+
+            apartment.ApartmentPictures.Add(defaultImage);
+
+        }
+    }
+    var inttest = list[0].ApartmentPictures.Count;
 
     ViewBag.List = list;
 
 }
-
 @foreach (var item in (List<Apartment>)ViewBag.List)
 {
     <div class="col-md-4">
@@ -23,7 +37,7 @@
                 <p class="card-text">Max Adults: @item.MaxAdults</p>
                 <p class="card-text">Max Children: @item.MaxChildren</p>
                 <p class="card-text">Total Rooms: @item.TotalRooms</p>
-                @Html.ActionLink("Details", "Details", new { id = item.Id })
+                @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "link" })
             </div>
         </div>
     </div>

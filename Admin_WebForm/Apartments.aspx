@@ -42,7 +42,10 @@
                             <ItemTemplate>
                                 <asp:LinkButton ID="btnEditApartment" runat="server" CssClass="fas fa-edit" CommandArgument='<%# Eval("Id") %>' OnClick="btnEditApartment_Click" />
                                 <asp:LinkButton ID="btnDeleteApartment" runat="server" CssClass="fas fa-trash-alt text-danger" CommandArgument='<%# Eval("Id") %>' OnClick="btnDeleteApartment_Click"
-                                    OnClientClick="return confirm('Are you sure you want to delete this apartment?');"/>
+                                    OnClientClick="return confirm('Are you sure you want to delete this apartment?');" />
+                                <asp:HiddenField ID="hiddenIsReserved" runat="server" Value='<%# Eval("Status") %>' />
+                                <asp:button ID="btnConfirmReservation" runat="server" CssClass="fas fa-check" Text="Confirm" CommandArgument='<%# Eval("Id") %>' OnClick="btnConfirmReservation_Click" OnDataBinding="btnConfirmReservation_DataBinding"/>
+
                             </ItemTemplate>
                         </asp:TemplateField>
                     </Columns>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>RWA Apartments</title>
     @Styles.Render("~/Content/css")
     @Styles.Render("~/Content/MyCss/CardsAndDetails.css")
     @Scripts.Render("~/bundles/modernizr")
@@ -12,6 +12,12 @@
           href="~/Content/jquery.fancybox.css"
           type="text/css"
           media="screen" />
+    <link href=" https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.min.css " rel="stylesheet" />
+    <style>
+        body {
+            background-image: linear-gradient(to bottom, #e9e9e9 0%, #fafafa 100%);
+        }
+    </style>
 
 </head>
 <body>
@@ -40,20 +46,20 @@
             </div>
         </main>
 
-        <footer class="pt-3 bg-dark">
+        <footer class="pt-3 bg-dark" style="margin-top: 1.25rem;">
             <p class="text-center">&copy; @DateTime.Now.Year Leo Žarković</p>
             <p class="text-center">Algebra University College</p>
         </footer>
     </div>
 
-    
+
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/Scripts/jquery.fancybox.pack.js")
     @RenderSection("scripts", required: false)
-
-    @*<script type="text/javascript" src="~/Scripts/jquery.fancybox.pack.js"></script>*@
+    <script src=" https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.all.min.js "></script>
+    
     <script>
         $(document).ready(function () {
             $(".fancy-photo").fancybox({

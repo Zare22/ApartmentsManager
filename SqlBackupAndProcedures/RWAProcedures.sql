@@ -1,5 +1,5 @@
 --Procedures script
-CREATE PROCA AuthenticateAdmin
+CREATE OR ALTER PROC AuthenticateAdmin
 	@email nvarchar(256),
 	@password nvarchar(max)
 AS
@@ -11,7 +11,7 @@ END
 
 GO
 
-CREATE PROCEDURE GetApartments
+CREATE OR ALTER PROCEDURE GetApartments
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -31,7 +31,7 @@ END
 
 GO
 
-CREATE PROCEDURE GetCities
+CREATE OR ALTER PROCEDURE GetCities
 AS
 BEGIN
     SELECT*
@@ -40,7 +40,7 @@ END
 
 GO
 
-CREATE PROCEDURE GetTags
+CREATE OR ALTER PROCEDURE GetTags
 AS
 BEGIN
     SELECT * FROM Tag
@@ -48,7 +48,7 @@ END
 
 GO
 
-CREATE PROCEDURE GetUsers
+CREATE OR ALTER PROCEDURE GetUsers
 AS
 BEGIN
     SELECT * FROM AspNetUsers
@@ -56,7 +56,7 @@ END
 
 GO
 
-CREATE PROCEDURE GetApartmentTags (@ApartmentId INT)
+CREATE OR ALTER PROCEDURE GetApartmentTags (@ApartmentId INT)
 AS
 BEGIN
     SELECT t.Id, t.Guid, t.Name, t.CreatedAt
@@ -67,7 +67,7 @@ END
 
 GO
 
-CREATE PROCEDURE GetApartmentImages (@ApartmentId INT)
+CREATE OR ALTER PROCEDURE GetApartmentImages (@ApartmentId INT)
 AS
 BEGIN
     SELECT Id, Guid, Base64Content, Name, IsRepresentative
@@ -77,7 +77,7 @@ END
 
 GO
 
-CREATE PROCEDURE GetTagInUse (@tagId INT)
+CREATE OR ALTER PROCEDURE GetTagInUse (@tagId INT)
 AS
 BEGIN
 
@@ -97,7 +97,7 @@ END
 
 GO
 
-CREATE PROCEDURE CreateTag (@tagName NVARCHAR(50))
+CREATE OR ALTER PROCEDURE CreateTag (@tagName NVARCHAR(50))
 AS
 BEGIN
 SET NOCOUNT ON
@@ -117,7 +117,7 @@ End
 
 GO
 
-CREATE PROCEDURE CreateApartment]
+CREATE OR ALTER PROCEDURE CreateApartment
     (@Guid uniqueidentifier,
      @CreatedAt datetime2(7),
      @Status int,
@@ -138,7 +138,8 @@ END
 
 GO
 
-GO PROCEDURE AddTagToApartment
+GO 
+CREATE OR ALTER PROCEDURE AddTagToApartment
     @ApartmentId INT,
     @TagId INT
 AS
@@ -155,7 +156,7 @@ End
 
 GO
 
-CREATE PROCEDURE AddImageToApartment
+CREATE OR ALTER PROCEDURE AddImageToApartment
     @ApartmentId INT,
 	@CreatedAt datetime2,
     @Base64Content VARCHAR(MAX), 
@@ -194,7 +195,7 @@ end
 
 GO
 
-CREATE PROCEDURE AddCityToApartment (@CityName nvarchar(250), @ApartmentId int)
+CREATE OR ALTER PROCEDURE AddCityToApartment (@CityName nvarchar(250), @ApartmentId int)
 AS
 BEGIN
     DECLARE @CityId int
@@ -212,7 +213,7 @@ END
 
 GO
 
-CREATE PROCEDURE DeleteApartment(@Id INT)
+CREATE OR ALTER PROCEDURE DeleteApartment(@Id INT)
 AS
 BEGIN
     DELETE FROM ApartmentPicture WHERE ApartmentId = @Id
@@ -226,7 +227,7 @@ END
 
 GO
 
-CREATE PROCEDURE DeleteImagesFromApartment
+CREATE OR ALTER PROCEDURE DeleteImagesFromApartment
     @ApartmentId INT,
     @ImageIds ImageIdsType READONLY
 AS
@@ -238,7 +239,7 @@ END
 
 GO
 
-CREATE PROCEDURE DeleteTag
+CREATE OR ALTER PROCEDURE DeleteTag
   @Id int
 AS
 BEGIN
@@ -248,7 +249,7 @@ END
 
 GO
 
-CREATE PROCEDURE UpdateApartment
+CREATE OR ALTER PROCEDURE UpdateApartment
 (@Id int,
 @Status int,
 @Address nvarchar(250),
@@ -272,3 +273,14 @@ TotalRooms = @totalRooms,
 BeachDistance = @beachDistance
 WHERE Id = @Id
 END
+
+GO
+
+CREATE OR ALTER PROCEDURE ConfirmReservation (@apartmentId INT)
+AS
+BEGIN
+    UPDATE Apartment
+    SET StatusId = 1
+    WHERE Id = @apartmentId;
+END
+

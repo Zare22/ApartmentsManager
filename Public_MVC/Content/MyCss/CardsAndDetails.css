@@ -5,14 +5,17 @@
 }
 
 .card {
-    border: none;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+    overflow: hidden;
 }
 
-    .card:hover {
-        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-    }
+.card:hover {
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+ }
 
 .card-img-top-container {
     width: 100%;
@@ -59,4 +62,19 @@
 .card-action a:hover {
     color: #ff5722;
     transform: translateY(-2px);
+}
+
+.link {
+    color: #1890ff;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+}
+
+.link:hover {
+    color: #40a9ff;
+    transform: translateY(-2px);
+}
+
+.link:active {
+    color: #096dd9;
 }

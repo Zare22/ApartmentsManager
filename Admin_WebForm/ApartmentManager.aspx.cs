@@ -20,23 +20,22 @@ namespace Admin_WebForm
             _allTags = ((IRepository)Application["database"]).GetTags();
             if (!IsPostBack)
             {
+                foreach (var status in Enum.GetValues(typeof(Status)))
+                {
+                    ddlStatus.Items.Add(new ListItem(status.ToString(), ((int)status).ToString()));
+                }
+
                 if (Session["apartment"] != null)
                 {
                     FillApartmentForm();
                 }
                 LoadTags();
-
-                foreach (var status in Enum.GetValues(typeof(Status)))
-                {
-                    ddlStatus.Items.Add(new ListItem(status.ToString(), ((int)status).ToString()));
-                }
-                ddlStatus.SelectedValue = "6";
             }
         }
 
         private void FillApartmentForm()
         {
-            updateApartment = ((Apartment)Session["apartment"]);
+            updateApartment = (Apartment)Session["apartment"];
             txtName.Text = updateApartment.Name;
             txtMaxAdults.Text = updateApartment.MaxAdults.ToString();
             txtMaxChildren.Text = updateApartment.MaxChildren.ToString();
@@ -45,7 +44,7 @@ namespace Admin_WebForm
             txtCityName.Text = updateApartment.CityName;
             txtAddress.Text = updateApartment.Address;
             txtBeachDistance.Text = updateApartment.BeachDistance.ToString();
-            ddlStatus.SelectedValue = updateApartment.Status.ToString();
+            ddlStatus.SelectedValue = ((int)updateApartment.Status).ToString();
             LoadApartmentImagesToRepeater();
         }
 
@@ -118,6 +117,7 @@ namespace Admin_WebForm
                 AssignImageUrlForRepeater(updateApartment.Images);
                 BindImages(updateApartment.Images);
             }
+            repeaterImages.Focus();
         }
 
         private void SetSelectedImages(IList<Image> images) => Session["selectedImages"] = updateApartment.Images;
