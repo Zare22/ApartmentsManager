@@ -1,8 +1,9 @@
 ﻿@model Public_MVC.Models.Apartment
 @using Public_MVC.Extensions
 @using Recaptcha.Web.Mvc
+@using Public_MVC.Resources
 @{
-    
+
     ViewBag.Title = "Details";
 }
 <style>
@@ -26,9 +27,7 @@
         <div class="card-header">
             <h3>@Model.Name</h3>
         </div>
-        <a href="~/Images/No_image.jpg"></a>
         <div class="card-body">
-            <a href="~/Images/No_image.jpg"
             <div class="card-img-top-container">
                 @if (Model.ApartmentPictures.Count < 1)
                 {
@@ -53,36 +52,36 @@
             <div class="description" style="display: flex; flex-wrap: nowrap; justify-content:space-between">
                 <div class="card-text">
                     <dl class="row">
-                        <dt class="col-sm-3">Name</dt>
+                        <dt class="col-sm-3">@Resource.name:</dt>
                         <dd class="col-sm-9">@Html.DisplayFor(model => model.Name)</dd>
 
-                        <dt class="col-sm-3">Status</dt>
+                        <dt class="col-sm-3">@Resource.status:</dt>
                         <dd class="col-sm-9">@Html.DisplayFor(model => model.ApartmentStatus.Name)</dd>
 
-                        <dt class="col-sm-3">City</dt>
+                        <dt class="col-sm-3">@Resource.city:</dt>
                         <dd class="col-sm-9">@Html.DisplayFor(model => model.City.Name) </dd>
 
-                        <dt class="col-sm-3">Addres</dt>
+                        <dt class="col-sm-3">@Resource.address:</dt>
                         <dd class="col-sm-9">@Html.DisplayFor(model => model.Address) </dd>
 
-                        <dt class="col-sm-3">Price</dt>
+                        <dt class="col-sm-3">@Resource.price:</dt>
                         <dd class="col-sm-9">@Html.DisplayFor(model => model.Price) </dd>
 
-                        <dt class="col-sm-3">Adults</dt>
+                        <dt class="col-sm-3">@Resource.adults:</dt>
                         <dd class="col-sm-9">@Html.DisplayFor(model => model.MaxAdults) </dd>
 
-                        <dt class="col-sm-3">Children</dt>
+                        <dt class="col-sm-3">@Resource.children:</dt>
                         <dd class="col-sm-9">@Html.DisplayFor(model => model.MaxChildren) </dd>
 
-                        <dt class="col-sm-3">Rooms</dt>
+                        <dt class="col-sm-3">@Resource.rooms:</dt>
                         <dd class="col-sm-9">@Html.DisplayFor(model => model.TotalRooms) </dd>
 
-                        <dt class="col-sm-3">Beach distance</dt>
+                        <dt class="col-sm-3">@Resource.beachDistance:</dt>
                         <dd class="col-sm-9">@Html.DisplayFor(model => model.BeachDistance) </dd>
                     </dl>
                 </div>
                 <div>
-                    <h5>Tags:</h5>
+                    <h5>@Resource.tags:</h5>
                     <ul>
                         @foreach (var tag in Model.TaggedApartments)
                         {
@@ -93,30 +92,30 @@
 
             </div>
             <div class="card-text">
-                @Html.ActionLink("Back to all apartments", "Index")
+                @Html.ActionLink(Resource.backToApartments, "Index")
             </div>
 
             <div style="display: flex; flex-wrap: nowrap; justify-content:space-between">
 
                 <form id="review-form">
                     <div class="form-group">
-                        <label for="reviewDetails">Review details:</label>
+                        <label for="reviewDetails">@Resource.reviewDetails:</label>
                         <textarea class="form-control" name="details" id="details"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="stars">Stars:</label>
+                        <label for="stars">@Resource.stars:</label>
                         <input type="number" class="form-control" name="stars" id="stars" min="1" max="5">
                     </div>
                     <input type="hidden" name="apartmentId" value="@Model.Id">
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">@Resource.submit</button>
                         <input type="hidden" name="userName" value="@User.Identity.Name" />
                     }
                     else
                     {
-                        <button type="submit" class="btn btn-primary" disabled>Submit</button>
-                        <label class="alert-warning" style="margin-left:2px">Reviews are only available to logged in users</label>
+                        <button type="submit" class="btn btn-primary" disabled>@Resource.submit</button>
+                        <label class="alert-warning" style="margin-left:2px">@Resource.reviewsBlocked!</label>
                     }
                 </form>
 
@@ -131,35 +130,35 @@
                             if (user != null)
                             {
                                 <div class="form-group">
-                                    <label for="email">Email</label>
+                                    <label for="email">Email:</label>
                                     <input type="email" class="form-control" id="email" name="email" value="@user.Email" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="phone">Phone Number</label>
+                                    <label for="phone">@Resource.phone:</label>
                                     <input type="tel" class="form-control" id="phone" name="phone" value="@user.PhoneNumber" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="address">Address</label>
+                                    <label for="address">@Resource.address:</label>
                                     <input type="text" class="form-control" id="address" name="address" value="@user.Address" required>
                                 </div>
                                 <input type="hidden" name="userId" value="@user.Id" />
 
-                                <button type="submit" class="btn btn-primary">Reserve</button>
+                                <button type="submit" class="btn btn-primary">@Resource.reserve</button>
                             }
                         }
                     }
                     else
                     {
                         <div class="form-group">
-                            <label for="email">Email</label>
+                            <label for="email">Email:</label>
                             <input type="email" class="form-control" id="email" name="email" required>
                         </div>
                         <div class="form-group">
-                            <label for="phone">Phone Number</label>
+                            <label for="phone">@Resource.phone:</label>
                             <input type="tel" class="form-control" id="phone" name="phone" required>
                         </div>
                         <div class="form-group">
-                            <label for="address">Address</label>
+                            <label for="address">@Resource.address:</label>
                             <input type="text" class="form-control" id="address" name="address" required>
                         </div>
                         @Html.RecaptchaWidget()
@@ -171,7 +170,7 @@
                             </div>
                         }
 
-                        <button type="submit" class="btn btn-primary">Reserve</button>
+                        <button type="submit" class="btn btn-primary">@Resource.reserve</button>
 
                     }
 

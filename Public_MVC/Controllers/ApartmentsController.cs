@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using Public_MVC.Context;
@@ -187,17 +190,20 @@ namespace Public_MVC.Controllers
             }
         }
 
-
-        //Situacija kada nema povezanih slika
-        public FileResult GetImage(int imageId)
+        [HttpPost]
+        public ActionResult ChangeLanguage(string culture)
         {
-            var image = db.ApartmentPictures.FirstOrDefault(p => p.Id == imageId);
+            
+            Thread.CurrentThread.CurrentCulture = new CultureInfo(culture);
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo(culture);
 
+            var test = Thread.CurrentThread.CurrentCulture.ToString();
 
-            byte[] imageBytes = image.Base64Content.FromBase64String();
-            return File(imageBytes, "image/png");
+            HttpCookie cookie = new HttpCookie("culture", culture);
+            cookie.Expires = DateTime.Now.AddYears(1);
+            Response.Cookies.Add(cookie);
+
+            return RedirectToAction("Index");
         }
-
-
     }
 }
