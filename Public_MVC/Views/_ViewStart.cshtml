@@ -1,3 +1,10 @@
-﻿@{
+﻿@using System.Threading
+@using System.Globalization;
+@{
+    if (Request.Cookies["culture"] != null)
+    {
+        Thread.CurrentThread.CurrentCulture = new CultureInfo(Request.Cookies["culture"].Value);
+        Thread.CurrentThread.CurrentUICulture = new CultureInfo(Request.Cookies["culture"].Value);
+    }
     Layout = "~/Views/Shared/_Layout.cshtml";
 }

@@ -1,26 +1,40 @@
 ﻿@using Microsoft.AspNet.Identity
-
+@using Public_MVC.Resources
 
 
 @if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
-    @Html.AntiForgeryToken()
+        @Html.AntiForgeryToken()
 
-<ul class="nav navbar-nav navbar-right">
-    <li>
-        <a style="text-decoration:none; cursor:default;" >Hello @User.Identity.GetUserName()!</a>  
-    </li>
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a style="text-decoration:none; cursor:default;">@Resource.hello @User.Identity.GetUserName()!</a>
+            </li>
 
-    <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
-</ul>
+            <li><a href="javascript:document.getElementById('logoutForm').submit()">@Resource.logout</a></li>
+        </ul>
     }
 }
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+
+        <li>
+            <button onclick="ChangeLanguage('en')">@Resource.english</button>
+            <button onclick="ChangeLanguage('hr')">@Resource.croatian</button>
+        </li>
+        <li>@Html.ActionLink(Resource.register, "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink(Resource.login, "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
     </ul>
 }
+
+<script>
+    function ChangeLanguage(culture) {
+        var url = "@Url.Action("ChangeLanguage", "Apartments")";
+        $.post(url, { culture: culture }, function () {
+            location.reload();
+        });
+    }
+</script>

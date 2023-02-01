@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Data.Entity;
+using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using Public_MVC.Context;
-using Public_MVC.Extensions;
 using Public_MVC.Models;
+using Public_MVC.Resources;
 using Recaptcha.Web.Mvc;
 
 namespace Public_MVC.Controllers
@@ -119,12 +119,12 @@ namespace Public_MVC.Controllers
                 review.ApartmentId = apartmentId;
                 db.ApartmentReviews.Add(review);
                 db.SaveChanges();
-                return Json(new { success = true, message = "Review submitted successfully!" });
+                return Json(new { success = true, message = Resource.ajaxReviewMessageSuccess });
 
             }
             catch (Exception)
             {
-                return Json(new { success = true, message = "An error occurred while submitting the review. Please try again later!" });
+                return Json(new { success = true, message = Resource.ajaxReviewMessageFailure });
             }
         }
 
@@ -139,13 +139,13 @@ namespace Public_MVC.Controllers
             {
                 if (String.IsNullOrEmpty(recaptchaHelper.Response))
                 {
-                    return Json(new { success = false, message = "Captcha answer cannot be empty!" });
+                    return Json(new { success = false, message = Resource.captchaEmpty });
                 }
 
                 var recaptchaResult = recaptchaHelper.VerifyRecaptchaResponse();
                 if (!recaptchaResult.Success)
                 {
-                    return Json(new { success = false, message = "Incorrect captcha answer!" });
+                    return Json(new { success = false, message = Resource.captchaWrong });
                 }
             }
             
@@ -179,25 +179,26 @@ namespace Public_MVC.Controllers
                 db.SaveChanges();
 
 
-                return Json(new { success = true, message = "Apartment reserved successfully!" });
+                return Json(new { success = true, message = Resource.ajaxReserveMessageSuccess });
             }
             catch (Exception)
             {
-                return Json(new { success = false, message = "An error occurred while reserving the apartment." });
+                return Json(new { success = false, message = Resource.ajaxReserveMessageFailure });
             }
         }
 
-
-        //Situacija kada nema povezanih slika
-        public FileResult GetImage(int imageId)
+        [HttpPost]
+        public ActionResult ChangeLanguage(string culture)
         {
-            var image = db.ApartmentPictures.FirstOrDefault(p => p.Id == imageId);
+            
+            Thread.CurrentThread.CurrentCulture = new CultureInfo(culture);
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo(culture);
 
+            HttpCookie cookie = new HttpCookie("culture", culture);
+            cookie.Expires = DateTime.Now.AddYears(1);
+            Response.Cookies.Add(cookie);
 
-            byte[] imageBytes = image.Base64Content.FromBase64String();
-            return File(imageBytes, "image/png");
+            return RedirectToAction("Index");
         }
-
-
     }
 }

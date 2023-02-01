@@ -1,8 +1,9 @@
 ﻿@model Public_MVC.Context.ApartmentsContext
 @using Public_MVC.Extensions
 @using Public_MVC.Models
+@using Public_MVC.Resources
 @{
-
+    
     var cityCookie = Request.Cookies["city"];
     var roomsCookie = Request.Cookies["rooms"];
     var adultsCookie = Request.Cookies["adults"];
@@ -29,23 +30,13 @@
         flex-direction: column;
         align-items: center;
     }
-
-    .card-text {
-        display: flex;
-        justify-content: space-around
-    }
-
-    .link {
-        display: flex;
-        justify-content: space-around
-    }
 </style>
 
 <div class="form-inline">
     <div class="form-group">
-        <label for="ddlCities">City:</label>
+        <label for="ddlCities">@Resource.city:</label>
         <select class="form-control" id="ddlCities">
-            <option value="Any">Any</option>
+            <option value="Any">@Resource.any</option>
             @foreach (var city in Model.Cities.OrderBy(c => c.Name))
             {
                 <option value="@city.Name" @(cityCookie?.Value == city.Name ? "selected" : "")>@city.Name</option>
@@ -53,30 +44,30 @@
         </select>
     </div>
     <div class="form-group">
-        <label for="totalRooms">Total Rooms:</label>
+        <label for="totalRooms">@Resource.rooms:</label>
         <input type="number" class="form-control" id="totalRooms" min="0" step="1" value="@(roomsCookie != null ? roomsCookie.Value : "")" />
 
     </div>
 
     <div class="form-group">
-        <label for="maxAdults">Max adults:</label>
+        <label for="maxAdults">@Resource.adults:</label>
         <input type="number" class="form-control" id="maxAdults" min="0" step="1" value="@(adultsCookie != null ? adultsCookie.Value : "")" />
     </div>
 
     <div class="form-group">
-        <label for="maxChildren">Max children:</label>
+        <label for="maxChildren">@Resource.children:</label>
         <input type="number" class="form-control" id="maxChildren" min="0" step="1" value="@(childrenCookie != null ? childrenCookie.Value : "")">
     </div>
-    <button type="button" id="btnFilter" class="btn btn-primary">Filter</button>
+    <button type="button" id="btnFilter" class="btn btn-primary">@Resource.filter</button>
 </div>
 
 <div class="form-inline">
     <div class="form-group">
-        <label for="sortByPrice">Sort by price:</label>
+        <label for="sortByPrice">@Resource.sort:</label>
         <select class="form-control" id="sortByPrice" name="sortByPrice">
-            <option value="default" @(sortCookie != null && sortCookie.Value == "default" ? "selected" : "")>Default</option>
-            <option value="ascending" @(sortCookie != null && sortCookie.Value == "ascending" ? "selected" : "")>Ascending</option>
-            <option value="descending" @(sortCookie != null && sortCookie.Value == "descending" ? "selected" : "")>Descending</option>
+            <option value="default" @(sortCookie != null && sortCookie.Value == "default" ? "selected" : "")>@Resource.defaultSort</option>
+            <option value="ascending" @(sortCookie != null && sortCookie.Value == "ascending" ? "selected" : "")>@Resource.ascending</option>
+            <option value="descending" @(sortCookie != null && sortCookie.Value == "descending" ? "selected" : "")>@Resource.descending</option>
         </select>
     </div>
 </div>
