@@ -3,7 +3,7 @@
 @using Public_MVC.Models
 @using Public_MVC.Resources
 @{
-
+    
     var cityCookie = Request.Cookies["city"];
     var roomsCookie = Request.Cookies["rooms"];
     var adultsCookie = Request.Cookies["adults"];
@@ -29,16 +29,6 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-    }
-
-    .card-text {
-        display: flex;
-        justify-content: space-around
-    }
-
-    .link {
-        display: flex;
-        justify-content: space-around
     }
 </style>
 
@@ -73,9 +63,9 @@
 
 <div class="form-inline">
     <div class="form-group">
-        <label for="sortByPrice">@Resource.sort</label>
+        <label for="sortByPrice">@Resource.sort:</label>
         <select class="form-control" id="sortByPrice" name="sortByPrice">
-            <option value="default" @(sortCookie != null && sortCookie.Value == "default" ? "selected" : "")>@Resource.defaultSort<option>
+            <option value="default" @(sortCookie != null && sortCookie.Value == "default" ? "selected" : "")>@Resource.defaultSort</option>
             <option value="ascending" @(sortCookie != null && sortCookie.Value == "ascending" ? "selected" : "")>@Resource.ascending</option>
             <option value="descending" @(sortCookie != null && sortCookie.Value == "descending" ? "selected" : "")>@Resource.descending</option>
         </select>

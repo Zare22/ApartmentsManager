@@ -79,6 +79,42 @@ namespace Public_MVC.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error occurred while reserving the apartment. Please try again later!.
+        /// </summary>
+        public static string ajaxReserveMessageFailure {
+            get {
+                return ResourceManager.GetString("ajaxReserveMessageFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apartment reserved successfully!.
+        /// </summary>
+        public static string ajaxReserveMessageSuccess {
+            get {
+                return ResourceManager.GetString("ajaxReserveMessageSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred while submitting the review. Please try again later!.
+        /// </summary>
+        public static string ajaxReviewMessageFailure {
+            get {
+                return ResourceManager.GetString("ajaxReviewMessageFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Review submitted successfully!.
+        /// </summary>
+        public static string ajaxReviewMessageSuccess {
+            get {
+                return ResourceManager.GetString("ajaxReviewMessageSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Any.
         /// </summary>
         public static string any {
@@ -120,6 +156,24 @@ namespace Public_MVC.Resources {
         public static string beachDistance {
             get {
                 return ResourceManager.GetString("beachDistance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Captcha answer cannot be empty!.
+        /// </summary>
+        public static string captchaEmpty {
+            get {
+                return ResourceManager.GetString("captchaEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Incorrect captcha answer!.
+        /// </summary>
+        public static string captchaWrong {
+            get {
+                return ResourceManager.GetString("captchaWrong", resourceCulture);
             }
         }
         
@@ -354,6 +408,24 @@ namespace Public_MVC.Resources {
         public static string submit {
             get {
                 return ResourceManager.GetString("submit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Oops....
+        /// </summary>
+        public static string swalFailure {
+            get {
+                return ResourceManager.GetString("swalFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Success!.
+        /// </summary>
+        public static string swalSuccess {
+            get {
+                return ResourceManager.GetString("swalSuccess", resourceCulture);
             }
         }
         

@@ -123,6 +123,18 @@
   <data name="adults" xml:space="preserve">
     <value>Max adults</value>
   </data>
+  <data name="ajaxReserveMessageFailure" xml:space="preserve">
+    <value>An error occurred while reserving the apartment. Please try again later!</value>
+  </data>
+  <data name="ajaxReserveMessageSuccess" xml:space="preserve">
+    <value>Apartment reserved successfully!</value>
+  </data>
+  <data name="ajaxReviewMessageFailure" xml:space="preserve">
+    <value>An error occurred while submitting the review. Please try again later!</value>
+  </data>
+  <data name="ajaxReviewMessageSuccess" xml:space="preserve">
+    <value>Review submitted successfully!</value>
+  </data>
   <data name="any" xml:space="preserve">
     <value>Any</value>
   </data>
@@ -137,6 +149,12 @@
   </data>
   <data name="beachDistance" xml:space="preserve">
     <value>Beach distance</value>
+  </data>
+  <data name="captchaEmpty" xml:space="preserve">
+    <value>Captcha answer cannot be empty!</value>
+  </data>
+  <data name="captchaWrong" xml:space="preserve">
+    <value>Incorrect captcha answer!</value>
   </data>
   <data name="children" xml:space="preserve">
     <value>Max children</value>
@@ -215,6 +233,12 @@
   </data>
   <data name="submit" xml:space="preserve">
     <value>Submit</value>
+  </data>
+  <data name="swalFailure" xml:space="preserve">
+    <value>Oops...</value>
+  </data>
+  <data name="swalSuccess" xml:space="preserve">
+    <value>Success!</value>
   </data>
   <data name="tags" xml:space="preserve">
     <value>Tags</value>

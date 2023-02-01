@@ -123,6 +123,18 @@
   <data name="adults" xml:space="preserve">
     <value>Broj odraslih</value>
   </data>
+  <data name="ajaxReserveMessageFailure" xml:space="preserve">
+    <value>Greška pri rezervaciji apartmana. Probajte kasnije!</value>
+  </data>
+  <data name="ajaxReserveMessageSuccess" xml:space="preserve">
+    <value>Apartman je rezerviran uspješno!</value>
+  </data>
+  <data name="ajaxReviewMessageFailure" xml:space="preserve">
+    <value>Greška pri slanju komentara. Probajte kasnije!</value>
+  </data>
+  <data name="ajaxReviewMessageSuccess" xml:space="preserve">
+    <value>Komentar uspješno poslan!</value>
+  </data>
   <data name="any" xml:space="preserve">
     <value>Svi</value>
   </data>
@@ -137,6 +149,12 @@
   </data>
   <data name="beachDistance" xml:space="preserve">
     <value>Udaljenost od plaže</value>
+  </data>
+  <data name="captchaEmpty" xml:space="preserve">
+    <value>Captcha ne može biti prazna</value>
+  </data>
+  <data name="captchaWrong" xml:space="preserve">
+    <value>Pogrešna captcha</value>
   </data>
   <data name="children" xml:space="preserve">
     <value>Broj djece</value>
@@ -215,6 +233,12 @@
   </data>
   <data name="submit" xml:space="preserve">
     <value>Pošalji</value>
+  </data>
+  <data name="swalFailure" xml:space="preserve">
+    <value>Greška...</value>
+  </data>
+  <data name="swalSuccess" xml:space="preserve">
+    <value>Uspješno!</value>
   </data>
   <data name="tags" xml:space="preserve">
     <value>Tagovi</value>
