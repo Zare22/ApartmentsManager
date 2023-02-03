@@ -104,6 +104,7 @@
     <Content Include="Content\v4-shims.min.css" />
     <Content Include="Error.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="Images\Logo.jpg" />
     <Content Include="Login.aspx" />
     <Content Include="AdminMaster.Master" />
     <Content Include="Scripts\bootstrap.bundle.js" />
